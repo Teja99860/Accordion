@@ -2,60 +2,56 @@ import React, { useState } from "react";
 import data from "./data";
 
 const Accordion = () => {
-  const [selected, setSelected] = useState(null);
-  const [enableMultiSelect, setEnableMultiSelect] = useState(false);
-  const [multiSelected, setMultiSelected] = useState([]);
+  const [singleSelected, setSingleSelected] = useState(null);
+  const [enableMultiSelect, setEnaableMutliSelect] = useState(false);
+  const [multiSelection, setMultiSelection] = useState([]);
 
   const handleSingleSelect = (id) => {
-    setSelected(id);
-    if (selected === id) {
-      setSelected(null);
-    }
+    setSingleSelected(id);
+    singleSelected === id && setSingleSelected(null);
+  };
+
+  const handleEnableMultiSelect = () => {
+    setEnaableMutliSelect(true);
   };
 
   const handleMultiSelect = (id) => {
-    if (multiSelected.includes(id)) {
-      setMultiSelected(multiSelected.filter((selectedId) => selectedId !== id));
-    } else {
-      setMultiSelected([...multiSelected, id]);
-    }
+    multiSelection.includes(id)
+      ? setMultiSelection(multiSelection.filter((selected) => selected !== id))
+      : setMultiSelection([...multiSelection, id]);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen flex-col ">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <button
-        type="button"
-        className="text-lg font-semibold border rounded-md px-4 py-2 bg-orange-600 cursor-pointer mb-5"
-        onClick={() => setEnableMultiSelect(true)}
+        className="mb-5 text-lg font-semibold border rounded-md bg-orange-500 px-4 py-2"
+        onClick={handleEnableMultiSelect}
       >
-        Multi Select
+        Enable MultiSelect
       </button>
-      {data?.map(({ question, id, answer }) => (
-        <div className="w-1/2">
+      {data.map(({ id, question, answer }) => (
+        <div className="w-1/2" key={id}>
           <div
-            className="flex justify-between border rounded-md px-5 py-2 bg-orange-500 text-lg font-semibold"
+            className="flex items-center justify-between border rounded-md px-4 py-2 bg-orange-500"
             onClick={
               enableMultiSelect
                 ? () => handleMultiSelect(id)
                 : () => handleSingleSelect(id)
             }
           >
-            <div className="flex-col">{question}</div>
+            <p className="text-lg font-semibold">{question}</p>
             <span>+</span>
           </div>
-          <div>
-            {enableMultiSelect
-              ? multiSelected.includes(id) && (
-                  <div className="flex justify-between border rounded-md px-5 py-3 bg-orange-400 ">
-                    {answer}
-                  </div>
-                )
-              : selected === id && (
-                  <div className="flex justify-between border rounded-md px-5 py-3 bg-orange-400 ">
-                    {answer}
-                  </div>
-                )}
-          </div>
+          {/* {enableMultiSelect
+            ? multiSelection.includes(id) && (
+                <p className="bg-orange-400 px-4 py-2 rounded-md">{answer}</p>
+              )
+            : singleSelected === id && (
+                <p className="bg-orange-400 px-4 py-2 rounded-md">{answer}</p>
+              )} */}
+          {(multiSelection.includes(id) || singleSelected === id) && (
+            <p className="bg-orange-400 px-4 py-2 rounded-md">{answer}</p>
+          )}
         </div>
       ))}
     </div>
