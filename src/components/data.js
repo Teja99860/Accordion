@@ -20,3 +20,5 @@ const data = [
     answer: "I use Git for version control.",
   },
 ];
+
+export default data;
